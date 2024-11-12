@@ -2,28 +2,28 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# Generowanie danych finansowych
-np.random.seed(1)
-dni = np.arange(1, 101)
-ceny = 100 + np.cumsum(np.random.normal(0, 1, 100))
+# Generowanie danych wyników sportowych
+sezony = np.arange(2015, 2025)
+wyniki_druzyna_a = np.random.randint(50, 100, len(sezony))
+wyniki_druzyna_b = np.random.randint(50, 100, len(sezony))
 
 # Tworzenie DataFrame
 df = pd.DataFrame({
-    'Dzień': dni,
-    'Cena': ceny
+    'Sezon': sezony,
+    'Drużyna A': wyniki_druzyna_a,
+    'Drużyna B': wyniki_druzyna_b
 })
 
-# Obliczanie średnich kroczących
-df['Średnia 5-dniowa'] = df['Cena'].rolling(window=5).mean()
-df['Średnia 20-dniowa'] = df['Cena'].rolling(window=20).mean()
+# Obliczanie średniej z wyników dla każdego sezonu
+df['Średnia'] = df[['Drużyna A', 'Drużyna B']].mean(axis=1)
 
 # Wizualizacja
 plt.figure(figsize=(10, 5))
-plt.plot(df['Dzień'], df['Cena'], label='Cena akcji', color='blue')
-plt.plot(df['Dzień'], df['Średnia 5-dniowa'], label='Średnia 5-dniowa', color='orange')
-plt.plot(df['Dzień'], df['Średnia 20-dniowa'], label='Średnia 20-dniowa', color='green')
-plt.xlabel('Dzień')
-plt.ylabel('Cena akcji (PLN)')
-plt.title('Analiza cen akcji')
+plt.plot(df['Sezon'], df['Drużyna A'], marker='o', label='Drużyna A', color='blue')
+plt.plot(df['Sezon'], df['Drużyna B'], marker='o', label='Drużyna B', color='red')
+plt.plot(df['Sezon'], df['Średnia'], marker='o', label='Średnia', color='green', linestyle='--')
+plt.xlabel('Sezon')
+plt.ylabel('Wynik')
+plt.title('Wyniki drużyn w różnych sezonach')
 plt.legend()
 plt.show()
